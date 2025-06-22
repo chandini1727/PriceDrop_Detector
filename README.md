@@ -24,7 +24,6 @@
 </p>
 
 ---
-
 ## ✨ Features
 
 - 🛒 Add product URLs to track price
