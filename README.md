@@ -3,11 +3,6 @@
 <p align="center">
   🔍 Stay updated on your favorite product prices <br/>
   and <b>NEVER</b> overpay again with instant alerts via <b>Email</b> & <b>WhatsApp</b>! 📉
-</p>
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/yourusername/price-drop-detector/main/assets/banner.png" width="600" alt="Price Drop Detector Banner"/>
-</p>
 
 ---
 
