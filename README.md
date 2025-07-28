@@ -16,8 +16,8 @@
 💸 **Price Drop Detector** is a full-stack web application that allows users to monitor product prices from top e-commerce sites like **Amazon**, **Flipkart**, and more.  
 It automatically checks prices and sends **real-time alerts** through:
 
-✅ Email (powered by **Nodemailer**)  
-✅ WhatsApp (powered by **Twilio API**)
+✅ **Email** (powered by **Nodemailer**)  
+✅ **WhatsApp** (powered by **Twilio API**)
 
 ---
 
