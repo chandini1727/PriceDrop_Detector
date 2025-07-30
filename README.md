@@ -3,6 +3,7 @@
 <p align="center">
   🔍 Stay updated on your favorite product prices <br/>
   and <b>NEVER</b> overpay again with instant alerts via <b>Email</b> & <b>WhatsApp</b>! 📉
+</p>
 
 ---
 
