@@ -23,7 +23,7 @@ Manually tracking these price changes is time-consuming and inefficient.
 ## 🏗️ Architecture Design
 
 <p align="center">
-  <img src="./Screenshot 2025-10-26 114436.png" alt="System Architecture Flowchart" width="95%" />
+  <img src="public/Screenshot 2025-10-26 114436.png" alt="System Architecture Flowchart" width="95%" />
 </p>
 
 **Figure:** System Architecture Flow for Price Drop Detector  
