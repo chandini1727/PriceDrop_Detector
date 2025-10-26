@@ -156,7 +156,7 @@ Built with **React.js**, the frontend allows users to:
 
 ---
 
-### ⚙️ Backend Services
+### Backend Services
 
 Developed using **Node.js + Express.js**, the backend handles automation and API operations.
 
@@ -179,7 +179,7 @@ Developed using **Node.js + Express.js**, the backend handles automation and API
 
 ---
 
-### 🌐 External Interfaces
+### External Interfaces
 
 | Service                | Purpose                              |
 | ---------------------- | ------------------------------------ |
