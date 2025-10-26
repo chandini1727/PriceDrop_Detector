@@ -23,89 +23,77 @@ Manually tracking these price changes is time-consuming and inefficient.
 ## 🏗️ Architecture Design
 ```mermaid
 flowchart TD
-    %% Style Definitions
-    classDef cluster fill:#f9f9f9,stroke:#333,stroke-width:2px
-    classDef backend fill:#e3f2fd,stroke:#0d47a1,stroke-width:1.5px
-    classDef database fill:#e8f5e9,stroke:#1b5e20,stroke-width:1.5px
-    classDef frontend fill:#fff3e0,stroke:#e65100,stroke-width:1.5px
-    classDef user fill:#fce4ec,stroke:#880e4f,stroke-width:1.5px
-    classDef notifications fill:#ede7f6,stroke:#311b92,stroke-width:1.5px
-    classDef scraping fill:#ffebee,stroke:#c62828,stroke-width:1.5px
-
-    %% External Actor
     User[fa:fa-user User]
+    ReactFrontend[fa:fa-desktop React Frontend]
+    RESTAPI[fa:fa-plug REST APIs]
+    NodeBackend[fa:fa-server Node.js Backend]
+    CoreScheduler[fa:fa-clock Core Scheduler]
+    PriceScraping[fa:fa-globe Price Scraping]
+    PostgreSQL[(fa:fa-database PostgreSQL)]
+    Notifications[fa:fa-bell Notifications]
+    SendAlerts[fa:fa-envelope Send Alerts]
+    Integrators[fa:fa-puzzle-piece Integrators]
+    Email[fa:fa-envelope Email]
+    WhatsApp[fa:fa-whatsapp WhatsApp]
+    ExternalSites[fa:fa-shopping-cart E-commerce Websites]
 
-    subgraph Frontend [React Frontend]
-        ReactApp[fa:fa-desktop React Frontend]
-        Dashboard[fa:fa-chart-line Dashboard]
-        URLManager[fa:fa-link Add URLs & Prices]
+    %% User Registration & Setup Flow
+    subgraph Phase1 [Phase 1: User Setup]
+        U1[User registers/login]
+        U2[User adds product URL]
+        U3[User sets target price]
+        U4[Data saved to database]
     end
 
-    subgraph Backend [Node.js Backend]
-        NodeBackend[fa:fa-server Node.js Backend]
-        subgraph BackendComponents
-            RESTAPIs[fa:fa-plug REST APIs]
-            CoreScheduler[fa:fa-clock Core Scheduler]
-        end
+    %% Price Monitoring Flow
+    subgraph Phase2 [Phase 2: Price Monitoring]
+        M1[Scheduler triggers]
+        M2[Get products to monitor]
+        M3[Scrape current prices]
+        M4[Store & compare prices]
+        M5[Check price conditions]
     end
-
-    subgraph Database [PostgreSQL Database]
-        PostgreSQL[(fa:fa-database PostgreSQL)]
-        ProductData[fa:fa-table Product Data]
-        PriceHistory[fa:fa-chart-bar Price History]
-    end
-
-    subgraph Scraping [Price Scraping System]
-        PriceScraping[fa:fa-globe Price Scraping]
-    end
-
-    subgraph Notifications [Notifications System]
-        NotificationsService[fa:fa-bell Notifications]
-        SendAlerts[fa:fa-envelope Send Alerts]
-        Integrators[fa:fa-puzzle-piece Integrators]
-        Email[fa:fa-envelope Email]
-        WhatsApp[fa:fa-whatsapp WhatsApp]
-    end
-
-    %% User Flow
-    User --> ReactApp
-    ReactApp --> Dashboard
-    ReactApp --> URLManager
-    URLManager --> RESTAPIs
-
-    %% Backend Flow
-    RESTAPIs --> NodeBackend
-    NodeBackend --> CoreScheduler
-    CoreScheduler --> PriceScraping
-    
-    %% Data Flow
-    PriceScraping --> RESTAPIs
-    RESTAPIs --> PostgreSQL
-    PostgreSQL --> ProductData
-    PostgreSQL --> PriceHistory
 
     %% Notification Flow
-    CoreScheduler --> NotificationsService
-    NotificationsService --> SendAlerts
-    SendAlerts --> Integrators
+    subgraph Phase3 [Phase 3: Notifications]
+        N1[Trigger notifications]
+        N2[Prepare alert message]
+        N3[Send via channels]
+        N4[User receives alert]
+    end
+
+    %% Complete Flow Connections
+    Phase1 --> Phase2
+    Phase2 --> Phase3
+
+    %% Detailed Connections
+    U1 --> ReactFrontend
+    ReactFrontend --> RESTAPI
+    RESTAPI --> NodeBackend
+    NodeBackend --> PostgreSQL
+    U2 --> U3 --> U4 --> PostgreSQL
+
+    M1 --> CoreScheduler
+    CoreScheduler --> M2
+    M2 --> PostgreSQL
+    PostgreSQL --> M3
+    M3 --> PriceScraping
+    PriceScraping --> ExternalSites
+    ExternalSites --> PriceScraping
+    PriceScraping --> M4
+    M4 --> PostgreSQL
+    PostgreSQL --> M5
+    M5 --> N1
+    N1 --> Notifications
+    Notifications --> N2
+    N2 --> SendAlerts
+    SendAlerts --> N3
+    N3 --> Integrators
     Integrators --> Email
     Integrators --> WhatsApp
-    SendAlerts --> User
-
-    %% Database Operations
-    RESTAPIs --> ProductData
-    RESTAPIs --> PriceHistory
-    ProductData --> RESTAPIs
-    PriceHistory --> RESTAPIs
-
-    %% Apply Styles
-    class User user
-    class NodeBackend,RESTAPIs,CoreScheduler backend
-    class PostgreSQL,ProductData,PriceHistory database
-    class ReactApp,Dashboard,URLManager frontend
-    class NotificationsService,SendAlerts,Integrators,Email,WhatsApp notifications
-    class PriceScraping scraping
-    class Frontend,Backend,Database,Notifications,Scraping cluster
+    Email --> N4
+    WhatsApp --> N4
+    N4 --> User
 ```
 **Figure:** System Architecture Flow for Price Drop Detector  
 This diagram illustrates the interaction between the **React Frontend**, **Node.js Backend**, **PostgreSQL Database**, and **External Integrations** (Email & WhatsApp).
