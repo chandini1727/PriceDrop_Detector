@@ -1,4 +1,3 @@
-````mdx
 # 💸 Price Drop Detector
 
 <p align="center">
@@ -214,4 +213,3 @@ const price = $('.product-price').text();
 <p align="center">
   <b>💸 Smart Price Tracking | Real-time Alerts | Maximum Savings</b>
 </p>
-```
