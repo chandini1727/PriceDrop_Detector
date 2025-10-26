@@ -24,66 +24,67 @@ Manually tracking these price changes is time-consuming and inefficient.
 ```mermaid
 flowchart TD
     User[fa:fa-user User]
-    LoginPage[fa:fa-sign-in Login Page]
-    RegisterPage[fa:fa-user-plus Register Page]
-    Dashboard[fa:fa-tachometer-alt Dashboard]
-    AddURLModal[fa:fa-plus Add URL Modal]
-    URLForm[fa:fa-link URL & Price Form]
-    Success[fa:fa-check Success Message]
-    ProductList[fa:fa-list Product List]
+    ReactDashboard[fa:fa-tachometer-alt React Dashboard]
+    AddProductForm[fa:fa-plus Add Product Form]
+    RESTAPI[fa:fa-plug REST API]
+    NodeBackend[fa:fa-server Node.js Backend]
+    PostgreSQL[(fa:fa-database PostgreSQL)]
+    CoreScheduler[fa:fa-clock Core Scheduler]
+    PriceScraping[fa:fa-globe Price Scraping]
+    Ecommerce[fa:fa-store E-commerce Site]
+    Notification[fa:fa-bell Notification Service]
+    Email[fa:fa-envelope Email Service]
+    UserEmail[fa:fa-inbox User's Email]
 
-    %% Authentication Flow
-    subgraph AuthFlow [Authentication Phase]
-        A1[User visits website]
-        A2{Already registered?}
-        A3[Login]
-        A4[Register]
-        A5[Authentication API]
-        A6[PostgreSQL Users Table]
-        A7[Dashboard Access]
+    %% User Interaction Flow
+    subgraph UserFlow [User Interaction Phase]
+        direction TB
+        UF1[User opens Dashboard]
+        UF2[Fills Product Form]
+        UF3[Submits URL & Target Price]
+        UF4[Data Saved to DB]
+        UF5[Confirmation Message]
     end
 
-    %% URL Addition Flow
-    subgraph URLFlow [URL Addition Phase]
-        U1[Dashboard Loads]
-        U2[Click Add Product]
-        U3[Enter Product Details]
-        U4[Submit URL & Target Price]
-        U5[Backend Validation]
-        U6[Price Scraping Initial]
-        U7[Save to Database]
-        U8[Update Dashboard]
+    %% Monitoring Flow
+    subgraph MonitorFlow [Monitoring Phase]
+        direction TB
+        MF1[Scheduler Triggers]
+        MF2[Fetch Products from DB]
+        MF3[Scrape Current Prices]
+        MF4[Compare Prices]
+        MF5{Price Match?}
+        MF6[Trigger Notification]
     end
 
-    %% Complete Flow
-    User --> A1
-    A1 --> A2
-    A2 -->|Yes| A3
-    A2 -->|No| A4
+    %% Notification Flow
+    subgraph NotifyFlow [Notification Phase]
+        direction TB
+        NF1[Prepare Email]
+        NF2[Send Email]
+        NF3[User Receives Alert]
+    end
+
+    %% Complete Flow Connections
+    User --> ReactDashboard
+    ReactDashboard --> AddProductForm
+    AddProductForm --> RESTAPI
+    RESTAPI --> NodeBackend
+    NodeBackend --> PostgreSQL
     
-    A3 --> LoginPage
-    A4 --> RegisterPage
+    UserFlow --> MonitorFlow
+    MonitorFlow --> NotifyFlow
     
-    LoginPage --> A5
-    RegisterPage --> A5
-    
-    A5 --> A6
-    A6 --> A7
-    A7 --> Dashboard
-    
-    Dashboard --> U1
-    U1 --> U2
-    U2 --> AddURLModal
-    AddURLModal --> U3
-    U3 --> URLForm
-    URLForm --> U4
-    U4 --> U5
-    U5 --> U6
-    U6 --> U7
-    U7 --> U8
-    U8 --> ProductList
-    U8 --> Success
-    Success --> Dashboard
+    PostgreSQL --> CoreScheduler
+    CoreScheduler --> PriceScraping
+    PriceScraping --> Ecommerce
+    Ecommerce --> PriceScraping
+    PriceScraping --> PostgreSQL
+    PostgreSQL --> MF5
+    MF5 -->|YES| Notification
+    Notification --> Email
+    Email --> UserEmail
+    UserEmail --> User
 ```
 **Figure:** System Architecture Flow for Price Drop Detector  
 This diagram illustrates the interaction between the **React Frontend**, **Node.js Backend**, **PostgreSQL Database**, and **External Integrations** (Email & WhatsApp).
