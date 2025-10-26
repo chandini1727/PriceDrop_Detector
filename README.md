@@ -21,11 +21,73 @@ Manually tracking these price changes is time-consuming and inefficient.
 ---
 
 ## 🏗️ Architecture Design
+```mermaid
+flowchart TD
+    %% Style Definitions
+    classDef cluster fill:#f9f9f9,stroke:#333,stroke-width:2px
+    classDef backend fill:#e3f2fd,stroke:#0d47a1,stroke-width:1.5px
+    classDef database fill:#e8f5e9,stroke:#1b5e20,stroke-width:1.5px
+    classDef frontend fill:#fff3e0,stroke:#e65100,stroke-width:1.5px
+    classDef user fill:#fce4ec,stroke:#880e4f,stroke-width:1.5px
+    classDef notifications fill:#ede7f6,stroke:#311b92,stroke-width:1.5px
 
-<p align="center">
-  <img src="public/Screenshot 2025-10-26 114436.png" alt="System Architecture Flowchart" width="95%" />
-</p>
+    %% External Actor
+    User[fa:fa-user User]
 
+    subgraph Frontend [React Frontend]
+        ReactApp[fa:fa-desktop React Frontend]
+        Dashboard[fa:fa-chart-line New Dashboard]
+        URLManager[fa:fa-link Add URLs & Prices]
+    end
+
+    subgraph Backend [Node.js Backend]
+        NodeBackend[fa:fa-server Node.js Backend]
+        CoreScheduler[fa:fa-clock Core Scheduler]
+        RESTAPIs[fa:fa-plug REST APIs]
+        PriceScraping[fa:fa-globe Price Scraping]
+    end
+
+    subgraph Database [PostgreSQL Database]
+        PostgreSQL[(fa:fa-database PostgreSQL)]
+        ProductData[fa:fa-table Product Data]
+        PriceHistory[fa:fa-chart-bar Price History]
+    end
+
+    subgraph Notifications [Notifications System]
+        NotificationsService[fa:fa-bell Notifications]
+        SendAlerts[fa:fa-envelope Send Alerts]
+        Integrators[fa:fa-puzzle-piece Integrators]
+        Email[fa:fa-envelope Email]
+        WhatsApp[fa:fa-whatsapp WhatsApp]
+    end
+
+    %% Flow
+    User --> ReactApp
+    ReactApp --> Dashboard
+    ReactApp --> URLManager
+    URLManager --> RESTAPIs
+    RESTAPIs --> NodeBackend
+    NodeBackend --> CoreScheduler
+    CoreScheduler --> PriceScraping
+    PriceScraping --> RESTAPIs
+    RESTAPIs --> PostgreSQL
+    PostgreSQL --> ProductData
+    PostgreSQL --> PriceHistory
+    NodeBackend --> NotificationsService
+    NotificationsService --> SendAlerts
+    SendAlerts --> Integrators
+    Integrators --> Email
+    Integrators --> WhatsApp
+    SendAlerts --> User
+
+    %% Apply Styles
+    class User user
+    class NodeBackend,CoreScheduler,RESTAPIs,PriceScraping backend
+    class PostgreSQL,ProductData,PriceHistory database
+    class ReactApp,Dashboard,URLManager frontend
+    class NotificationsService,SendAlerts,Integrators,Email,WhatsApp notifications
+    class Frontend,Backend,Database,Notifications cluster
+```
 **Figure:** System Architecture Flow for Price Drop Detector  
 This diagram illustrates the interaction between the **React Frontend**, **Node.js Backend**, **PostgreSQL Database**, and **External Integrations** (Email & WhatsApp).
 
