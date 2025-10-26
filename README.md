@@ -30,27 +30,33 @@ flowchart TD
     classDef frontend fill:#fff3e0,stroke:#e65100,stroke-width:1.5px
     classDef user fill:#fce4ec,stroke:#880e4f,stroke-width:1.5px
     classDef notifications fill:#ede7f6,stroke:#311b92,stroke-width:1.5px
+    classDef scraping fill:#ffebee,stroke:#c62828,stroke-width:1.5px
 
     %% External Actor
     User[fa:fa-user User]
 
     subgraph Frontend [React Frontend]
         ReactApp[fa:fa-desktop React Frontend]
-        Dashboard[fa:fa-chart-line New Dashboard]
+        Dashboard[fa:fa-chart-line Dashboard]
         URLManager[fa:fa-link Add URLs & Prices]
     end
 
     subgraph Backend [Node.js Backend]
         NodeBackend[fa:fa-server Node.js Backend]
-        CoreScheduler[fa:fa-clock Core Scheduler]
-        RESTAPIs[fa:fa-plug REST APIs]
-        PriceScraping[fa:fa-globe Price Scraping]
+        subgraph BackendComponents
+            RESTAPIs[fa:fa-plug REST APIs]
+            CoreScheduler[fa:fa-clock Core Scheduler]
+        end
     end
 
     subgraph Database [PostgreSQL Database]
         PostgreSQL[(fa:fa-database PostgreSQL)]
         ProductData[fa:fa-table Product Data]
         PriceHistory[fa:fa-chart-bar Price History]
+    end
+
+    subgraph Scraping [Price Scraping System]
+        PriceScraping[fa:fa-globe Price Scraping]
     end
 
     subgraph Notifications [Notifications System]
@@ -61,32 +67,45 @@ flowchart TD
         WhatsApp[fa:fa-whatsapp WhatsApp]
     end
 
-    %% Flow
+    %% User Flow
     User --> ReactApp
     ReactApp --> Dashboard
     ReactApp --> URLManager
     URLManager --> RESTAPIs
+
+    %% Backend Flow
     RESTAPIs --> NodeBackend
     NodeBackend --> CoreScheduler
     CoreScheduler --> PriceScraping
+    
+    %% Data Flow
     PriceScraping --> RESTAPIs
     RESTAPIs --> PostgreSQL
     PostgreSQL --> ProductData
     PostgreSQL --> PriceHistory
-    NodeBackend --> NotificationsService
+
+    %% Notification Flow
+    CoreScheduler --> NotificationsService
     NotificationsService --> SendAlerts
     SendAlerts --> Integrators
     Integrators --> Email
     Integrators --> WhatsApp
     SendAlerts --> User
 
+    %% Database Operations
+    RESTAPIs --> ProductData
+    RESTAPIs --> PriceHistory
+    ProductData --> RESTAPIs
+    PriceHistory --> RESTAPIs
+
     %% Apply Styles
     class User user
-    class NodeBackend,CoreScheduler,RESTAPIs,PriceScraping backend
+    class NodeBackend,RESTAPIs,CoreScheduler backend
     class PostgreSQL,ProductData,PriceHistory database
     class ReactApp,Dashboard,URLManager frontend
     class NotificationsService,SendAlerts,Integrators,Email,WhatsApp notifications
-    class Frontend,Backend,Database,Notifications cluster
+    class PriceScraping scraping
+    class Frontend,Backend,Database,Notifications,Scraping cluster
 ```
 **Figure:** System Architecture Flow for Price Drop Detector  
 This diagram illustrates the interaction between the **React Frontend**, **Node.js Backend**, **PostgreSQL Database**, and **External Integrations** (Email & WhatsApp).
