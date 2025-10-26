@@ -67,6 +67,7 @@ EMAIL_PASS=your_email_password
 TWILIO_SID=your_twilio_sid
 TWILIO_AUTH_TOKEN=your_twilio_auth_token
 TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
+```
 
 BASE_URL=http://localhost:5000
 
