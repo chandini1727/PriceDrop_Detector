@@ -23,68 +23,53 @@ Manually tracking these price changes is time-consuming and inefficient.
 ## 🏗️ Architecture Design
 ```mermaid
 flowchart TD
-    User[fa:fa-user User]
-    ReactDashboard[fa:fa-tachometer-alt React Dashboard]
-    AddProductForm[fa:fa-plus Add Product Form]
-    RESTAPI[fa:fa-plug REST API]
-    NodeBackend[fa:fa-server Node.js Backend]
-    PostgreSQL[(fa:fa-database PostgreSQL)]
-    CoreScheduler[fa:fa-clock Core Scheduler]
-    PriceScraping[fa:fa-globe Price Scraping]
-    Ecommerce[fa:fa-store E-commerce Site]
-    Notification[fa:fa-bell Notification Service]
-    Email[fa:fa-envelope Email Service]
-    UserEmail[fa:fa-inbox User's Email]
-
-    %% User Interaction Flow
-    subgraph UserFlow [User Interaction Phase]
-        direction TB
-        UF1[User opens Dashboard]
-        UF2[Fills Product Form]
-        UF3[Submits URL & Target Price]
-        UF4[Data Saved to DB]
-        UF5[Confirmation Message]
+    %% Frontend Section
+    subgraph Frontend [Frontend - React.js Web Application]
+        A[User Interface] --> B[Add URLs & Set Target Prices]
+        B --> C[Dashboard & Product List Display]
     end
 
-    %% Monitoring Flow
-    subgraph MonitorFlow [Monitoring Phase]
-        direction TB
-        MF1[Scheduler Triggers]
-        MF2[Fetch Products from DB]
-        MF3[Scrape Current Prices]
-        MF4[Compare Prices]
-        MF5{Price Match?}
-        MF6[Trigger Notification]
+    %% Backend Section
+    subgraph Backend [Backend - Node.js + Express.js]
+        D[REST API Endpoints] --> E[CRUD Operations]
+        E --> F[Price Scraping via Cheerio]
+        F --> G[Notification System]
+        E --> H[Cron-based Scheduler]
     end
 
-    %% Notification Flow
-    subgraph NotifyFlow [Notification Phase]
-        direction TB
-        NF1[Prepare Email]
-        NF2[Send Email]
-        NF3[User Receives Alert]
+    %% Database Section
+    subgraph Database [Database - PostgreSQL]
+        I[Product Details & URLs]
+        J[Notification Status]
+        I --> J
     end
 
-    %% Complete Flow Connections
-    User --> ReactDashboard
-    ReactDashboard --> AddProductForm
-    AddProductForm --> RESTAPI
-    RESTAPI --> NodeBackend
-    NodeBackend --> PostgreSQL
+    %% External Integrations Section
+    subgraph External [External Integrations]
+        K[Gmail - Nodemailer]
+        L[WhatsApp - Twilio API]
+    end
+
+    %% Flow Connections
+    A -->|HTTP Requests| D
+    D -->|Store/Retrieve Data| I
+    H -->|Trigger Scraping| F
+    F -->|Update Prices| I
+    G -->|Send Alerts| K
+    G -->|Send Alerts| L
+    I -->|Check Conditions| G
+    C -->|Display Data| A
+
+    %% Styling
+    classDef frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef backend fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef database fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef external fill:#fff3e0,stroke:#e65100,stroke-width:2px
     
-    UserFlow --> MonitorFlow
-    MonitorFlow --> NotifyFlow
-    
-    PostgreSQL --> CoreScheduler
-    CoreScheduler --> PriceScraping
-    PriceScraping --> Ecommerce
-    Ecommerce --> PriceScraping
-    PriceScraping --> PostgreSQL
-    PostgreSQL --> MF5
-    MF5 -->|YES| Notification
-    Notification --> Email
-    Email --> UserEmail
-    UserEmail --> User
+    class A,B,C frontend
+    class D,E,F,G,H backend
+    class I,J database
+    class K,L external
 ```
 **Figure:** System Architecture Flow for Price Drop Detector  
 This diagram illustrates the interaction between the **React Frontend**, **Node.js Backend**, **PostgreSQL Database**, and **External Integrations** (Email & WhatsApp).
