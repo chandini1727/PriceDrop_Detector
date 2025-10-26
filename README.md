@@ -1,11 +1,12 @@
-# Price Drop Detector
+<h1 align="center">💸 Price Drop Detector</h1>
 
 <p align="center">
-  Stay updated on your favorite product prices and never overpay again.<br/>
-  Get instant alerts via <b>Email</b> and <b>WhatsApp</b> whenever prices drop.
+  <i>Monitor product prices across platforms and receive real-time alerts when prices fall.</i><br/>
+  Stay informed with instant notifications via <b>Email</b> and <b>WhatsApp</b>.
 </p>
 
----
+<hr/>
+
 
 ## 🧠 Understanding the Problem
 
