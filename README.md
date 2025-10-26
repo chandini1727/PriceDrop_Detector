@@ -134,8 +134,6 @@ It handles all product operations, scraping, scheduling, and notifications.
 ## 🏗️ High Level Design (HLD)
 
 ### 🧱 Architecture Overview
-
-```plaintext
  ┌─────────────────────────────────────┐
  │              Frontend               │
  │   React.js Web Application (UI)     │
@@ -167,7 +165,7 @@ It handles all product operations, scraping, scheduling, and notifications.
  │ - Gmail (Nodemailer)                │
  │ - WhatsApp (Twilio API)             │
  └─────────────────────────────────────┘
-```
+
 
 ## 🔁 Workflow
 
