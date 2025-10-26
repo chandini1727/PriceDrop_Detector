@@ -8,7 +8,7 @@
 <hr/>
 
 
-## 🧠 Understanding the Problem
+## Understanding the Problem
 
 In today’s e-commerce world, prices fluctuate frequently across online platforms such as **Amazon**, **Flipkart**, **Meesho**, **Westside**, and **H&M**.  
 Manually tracking these price changes is time-consuming and inefficient.
@@ -21,7 +21,7 @@ Manually tracking these price changes is time-consuming and inefficient.
 
 ---
 
-## 🏗️ Architecture Design
+## Architecture Design
 ```mermaid
 flowchart TD
     %% Frontend Section
@@ -77,7 +77,7 @@ This diagram illustrates the interaction between the **React Frontend**, **Node.
 
 ---
 
-## ⚙️ Functional Requirements
+## Functional Requirements
 
 | Feature | Description |
 |----------|-------------|
@@ -92,7 +92,7 @@ This diagram illustrates the interaction between the **React Frontend**, **Node.
 
 ---
 
-## 🚫 Non-Functional Requirements
+##  Non-Functional Requirements
 
 | Requirement | Description |
 |-------------|-------------|
@@ -106,7 +106,7 @@ This diagram illustrates the interaction between the **React Frontend**, **Node.
 
 ---
 
-## 🔌 Setup, APIs, and System Interfaces
+##  Setup, APIs, and System Interfaces
 
 ### 🧩 Environment Variables (`.env`)
 
@@ -126,9 +126,6 @@ TWILIO_AUTH_TOKEN=your_twilio_auth_token
 TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
 ````
 
-BASE_URL=[http://localhost:5000](http://localhost:5000)
-
----
 
 ## API Endpoints
 
@@ -194,19 +191,19 @@ Developed using **Node.js + Express.js**, the backend handles automation and API
 
 ---
 
-## 🔁 Workflow Summary
+## Workflow Summary
 
-1. 🧩 **User Input** → User submits a product URL & target price.
-2. 🕵️ **Scraping** → Axios + Cheerio extract product name, price, and image.
-3. 🗄️ **Storage** → Product data saved in PostgreSQL.
-4. ⏰ **Scheduler** → Node-Cron triggers periodic price checks.
-5. ⚖️ **Comparison** → Current price vs. target price.
-6. 📢 **Notification** → Sends alert via Email and WhatsApp.
-7. 📊 **Dashboard** → Frontend displays tracked products and insights.
+1. **User Input** → User submits a product URL & target price.
+2. **Scraping** → Axios + Cheerio extract product name, price, and image.
+3. **Storage** → Product data saved in PostgreSQL.
+4. **Scheduler** → Node-Cron triggers periodic price checks.
+5. **Comparison** → Current price vs. target price.
+6. **Notification** → Sends alert via Email and WhatsApp.
+7. **Dashboard** → Frontend displays tracked products and insights.
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 
 | Category            | Technology          |
 | ------------------- | ------------------- |
@@ -221,9 +218,9 @@ Developed using **Node.js + Express.js**, the backend handles automation and API
 
 ---
 
-## 🔑 Key Code Components
+## Key Code Components
 
-### 🧰 Scheduler
+### Scheduler
 
 Uses **node-cron** to periodically check prices.
 
@@ -235,7 +232,7 @@ cron.schedule('0 * * * *', async () => {
 
 ---
 
-### 🕵️ Scraper
+### Scraper
 
 Fetches product HTML and extracts data with **cheerio**.
 
@@ -247,7 +244,7 @@ const price = $('.product-price').text();
 
 ---
 
-### 🧑‍💻 Developer Notes
+### Developer Notes
 
 * Retry mechanism for failed scraping (3 attempts).
 * Graceful error handling for invalid URLs or missing data.
