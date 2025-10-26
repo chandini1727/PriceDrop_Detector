@@ -1,49 +1,266 @@
-<h1 align="center">💸 Price Drop Detector</h1>
+# 💸 Price Drop Detector
+
 <p align="center">
   🔍 Stay updated on your favorite product prices <br/>
   and <b>NEVER</b> overpay again with instant alerts via <b>Email</b> & <b>WhatsApp</b>! 📉
 </p>
 
 ---
-## 🚀 Overview
-💸 **Price Drop Detector** is a full-stack web application that allows users to monitor product prices from top e-commerce sites like **Amazon**, **Flipkart**, and more.  
-It automatically checks prices and sends **real-time alerts** through:
 
-✅ **Email** (powered by **Nodemailer**) 
-✅ **WhatsApp** (powered by **Twilio API**)
+## 🧠 Understanding the Problem
 
----
+In today’s e-commerce world, prices fluctuate frequently across online platforms such as **Amazon**, **Flipkart**, **Meesho**, **Westside**, and **H&M**.  
+Manually tracking these price changes is time-consuming and inefficient.
 
-## 🌐 Socials
+**Problem Statement:**  
+> Users often overpay for products due to lack of real-time price tracking across e-commerce sites.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/your-profile)  
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:your@email.com)
+**Goal:**  
+> Build an automated system that continuously monitors product prices, detects drops below a target threshold, and instantly notifies users via **Email** and **WhatsApp**.
 
 ---
 
-## 💻 Tech Stack
+## ⚙️ Functional Requirements
 
-| Frontend | Backend | Notifications | Database | Scheduler |
-|----------|---------|---------------|----------|-----------|
-| ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) | ![Nodemailer](https://img.shields.io/badge/Nodemailer-yellowgreen?style=for-the-badge)<br>![Twilio](https://img.shields.io/badge/Twilio-F22F46?style=for-the-badge&logo=twilio&logoColor=white) | ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white) | ![Cron](https://img.shields.io/badge/Cron%20Jobs-CB3837?style=for-the-badge&logo=cron&logoColor=white) |
-
----
-
-## ✨ Features
-
-- 🔗 **Track Products:** Add product URLs to monitor for price drops  
-- ⏰ **Hourly Checks:** Cron job checks prices hourly  
-- 📧 **Email Alerts:** Notifies users via email instantly  
-- 📲 **WhatsApp Alerts:** Sends instant Twilio WhatsApp messages  
-- 🧠 **Smooth UI:** Built using React  
-- 🔒 **Secure Storage:** MongoDB keeps your data safe  
+| Feature | Description |
+|----------|-------------|
+| **Product Tracking** | Users can add product URLs with target prices to monitor. |
+| **Price Scraping** | Scrapes product info (name, image, price) using **Axios** and **Cheerio**. |
+| **Scheduled Checks** | Price checks run periodically using **Node-Cron** (hourly by default). |
+| **Notifications** | Sends alerts via **Email** (Nodemailer) and **WhatsApp** (Twilio API). |
+| **Shortened URLs** | Generates unique short URLs for tracked products. |
+| **Dashboard Metrics** | Provides statistics like total tracked products and potential savings. |
+| **CRUD Operations** | Create, Read, Update, and Delete product tracking entries. |
+| **Similar Product Suggestions** | Recommends related products for better purchase decisions. |
 
 ---
 
-## 🛠️ Installation & Setup
+## 🚫 Non-Functional Requirements
 
-### 1. 📥 Clone the Repository
+| Requirement | Description |
+|-------------|-------------|
+| **Scalability** | Should efficiently handle many concurrent users and products. |
+| **Reliability** | Scheduler and notifications must operate without failures. |
+| **Performance** | API responses and scraping should complete within a few seconds. |
+| **Security** | Sensitive credentials are secured via `.env` configuration. |
+| **Maintainability** | Code is modular for easy updates and new integrations. |
+| **Error Handling** | Implements retries, fallbacks, and structured error responses. |
+| **Data Integrity** | PostgreSQL ensures consistency and durability of stored product data. |
+
+---
+
+## 🔌 Setup, APIs, and System Interfaces
+
+### 🧩 Environment Variables (`.env`)
 
 ```bash
-git clone https://github.com/yourusername/price-drop-detector.git
-cd price-drop-detector
+PORT=5000
+DB_USER=your_postgres_user
+DB_HOST=localhost
+DB_NAME=pricedrop
+DB_PASSWORD=your_postgres_password
+DB_PORT=5432
+
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_password
+
+TWILIO_SID=your_twilio_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
+
+BASE_URL=http://localhost:5000
+
+## API Endpoints
+
+| Method   | Endpoint                | Description                        |
+| -------- | ----------------------- | ---------------------------------- |
+| `POST`   | `/api/track-product`    | Add a product for price tracking   |
+| `GET`    | `/api/products`         | Retrieve all tracked products      |
+| `GET`    | `/api/product/:id`      | Get a specific product’s details   |
+| `PUT`    | `/api/product/:id`      | Update target price                |
+| `DELETE` | `/api/product/:id`      | Remove a tracked product           |
+| `GET`    | `/api/dashboard`        | View analytics and dashboard stats |
+| `POST`   | `/api/similar-products` | Fetch related/similar products     |
+| `GET`    | `/s/:shortCode`         | Redirect shortened product URLs    |
+
+## 🧠 System Interfaces
+
+### 🖥️ User Interface
+The **Frontend** is developed using **React.js**, offering a smooth and interactive experience for users.  
+It allows users to:
+
+- Add product URLs and set target prices  
+- View tracked products with current and target prices  
+- Access insights and savings statistics through a dashboard  
+- Manage or delete tracked products  
+- Receive instant feedback on tracking updates
+
+---
+
+### ⚙️ Backend Services
+The **Backend** is built using **Express.js** and acts as the central control layer.  
+It handles all product operations, scraping, scheduling, and notifications.  
+
+**Core Responsibilities:**
+- Manage CRUD operations for tracked products  
+- Scrape product data from various e-commerce platforms  
+- Schedule automated price checks (Cron jobs)  
+- Trigger email and WhatsApp notifications  
+- Maintain product states and logs in PostgreSQL  
+
+**Libraries Used:**
+- `axios` → Fetch product HTML pages  
+- `cheerio` → Parse and extract product data  
+- `node-cron` → Schedule automated tasks  
+- `nodemailer` → Send Email alerts  
+- `twilio` → Send WhatsApp notifications  
+- `pg` → Manage PostgreSQL database connections  
+
+---
+
+### 🌐 External Interfaces
+
+| Service | Purpose |
+|----------|----------|
+| **Twilio API** | Send real-time WhatsApp notifications |
+| **Nodemailer (Gmail)** | Deliver Email alerts instantly |
+| **Axios** | Fetch product pages for scraping |
+| **Cheerio** | Parse and extract structured data from product HTML |
+| **PostgreSQL** | Store product and user notification data securely |
+
+---
+
+## 🏗️ High Level Design (HLD)
+
+### 🧱 Architecture Overview
+
+```plaintext
+ ┌─────────────────────────────────────┐
+ │              Frontend               │
+ │   React.js Web Application (UI)     │
+ │ - Add URLs & set target prices      │
+ │ - Show dashboard & product list     │
+ └─────────────────────────────────────┘
+                 │
+                 ▼
+ ┌─────────────────────────────────────┐
+ │              Backend                │
+ │         Node.js + Express.js        │
+ │ - REST APIs for CRUD operations     │
+ │ - Price scraping via Cheerio        │
+ │ - Notification (Email/WhatsApp)     │
+ │ - Cron-based scheduler              │
+ └─────────────────────────────────────┘
+                 │
+                 ▼
+ ┌─────────────────────────────────────┐
+ │             Database                │
+ │             PostgreSQL              │
+ │ - Store product details, URLs       │
+ │ - Maintain notification status      │
+ └─────────────────────────────────────┘
+                 │
+                 ▼
+ ┌─────────────────────────────────────┐
+ │       External Integrations         │
+ │ - Gmail (Nodemailer)                │
+ │ - WhatsApp (Twilio API)             │
+ └─────────────────────────────────────┘
+
+## 🔁 Workflow
+
+### 🧩 User Input
+The user submits a product URL and sets a target price via the frontend UI.
+
+---
+
+### 🕵️ Data Scraping
+The backend uses Axios and Cheerio to extract:
+
+- Product name  
+- Image URL  
+- Current price  
+- Source website  
+
+---
+
+### 🗄️ Database Storage
+Product data and target price are stored in the PostgreSQL database.
+
+---
+
+### 🔗 URL Shortening
+A custom short link is generated dynamically for each tracked product.
+
+---
+
+### ⏰ Automated Scheduler
+Using Node-Cron, the system checks prices every hour (or every minute in testing mode).
+
+---
+
+### ⚖️ Price Comparison
+The current price is compared with the user’s target price.
+
+---
+
+### 📢 Notification Trigger
+If the price ≤ target price:
+
+- Email Alert → Sent using Nodemailer  
+- WhatsApp Message → Sent using Twilio API  
+
+---
+
+### 📊 Dashboard Insights
+The system aggregates and displays:
+
+- Total tracked products  
+- Potential savings  
+- Near-target items  
+- Average discount percentage  
+
+## Tech Stack
+| Category            | Technology                            |
+| ------------------- | ------------------------------------- |
+| **Frontend**        | React.js                              |
+| **Backend**         | Node.js, Express.js                   |
+| **Database**        | PostgreSQL                            |
+| **Scraping**        | Axios, Cheerio                        |
+| **Scheduler**       | Node-Cron                             |
+| **Notifications**   | Nodemailer (Email), Twilio (WhatsApp) |
+| **Utilities**       | UUID, dotenv                          |
+| **Version Control** | Git, GitHub                           |
+## 🔑 Key Code Components
+
+---
+
+### 🧰 Scheduler
+
+Uses **node-cron** to run periodic price checks.
+
+**Default:** runs every minute for testing (`* * * * *`).
+
+**Change to hourly in production:**
+
+```js
+cron.schedule('0 * * * *', async () => { ... })
+```
+
+### 🕵️ Scraper
+
+Uses **axios** to fetch HTML and **cheerio** to extract:
+
+- Product name  
+- Price  
+- Image  
+- Website  
+### Developer Notes
+
+- Includes retry mechanism for scraping (up to 3 attempts).
+
+- Handles edge cases like invalid links or missing price tags.
+
+- WhatsApp notifications include validation and rate-limit handling.
+
+- Built with modular and environment-safe architecture.
