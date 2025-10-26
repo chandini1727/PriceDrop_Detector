@@ -1,8 +1,8 @@
-# 💸 Price Drop Detector
+# Price Drop Detector
 
 <p align="center">
-  🔍 Stay updated on your favorite product prices <br/>
-  and <b>NEVER</b> overpay again with instant alerts via <b>Email</b> & <b>WhatsApp</b>! 📉
+  Stay updated on your favorite product prices and never overpay again.<br/>
+  Get instant alerts via <b>Email</b> and <b>WhatsApp</b> whenever prices drop.
 </p>
 
 ---
