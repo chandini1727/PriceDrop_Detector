@@ -6,8 +6,6 @@
 </p>
 
 <hr/>
-
-
 ## Understanding the Problem
 
 In today’s e-commerce world, prices fluctuate frequently across online platforms such as **Amazon**, **Flipkart**, **Meesho**, **Westside**, and **H&M**.  
